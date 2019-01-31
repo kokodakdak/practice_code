@@ -32,7 +32,7 @@ if __name__ =="__main__":
 	if stdErr:
 		sys.stderr.write(stdErr)
 	sys.stdout.write(stdOut)
-	genThumb(filepath)
+	genThumb(src)
 
 
 
