@@ -18,10 +18,10 @@ def genJpg(path):
 	newroot.append(result)
 	cmd  = "convert {target} {result}".format(target = target, result = result)
 	os.system(cmd)
-	print newroot
+	return newroot
 
 
-def genMov(path):
+def genMov(path,firframe,lastframe):
 	ext = ".mov"
 	p,filename_ext = os.path.split(path)
 	filename,ext_t = os.path.splitext(filename_ext)
@@ -30,7 +30,8 @@ def genMov(path):
 		os.makedirs(resultDir)
 	target = p + "/" + filename+ext_t
 	result = resultDir + "/" + filename + ext
-
+	cmd = "/$HOME/app/ffmpeg/ffmpeg -f image -start_number " + firframe + " -r 24 -i " + target + ".%d.jpg -vframes " + lastframe + " -vcodec libx264 -v output.mov "
+	os.system(cmd)
 
 
 
@@ -67,8 +68,11 @@ def countFile(results):
 		flist = i.split(".")
 		snum.append(flist[1])
 		snum.sort()
-		howmany = int(snum[-1]) -int(snum[0]) + 1
-	return howmany
+		
+		firframe = int(snum[0])
+		lastframe = int(snum[-1])
+		howmany = lastframe - firframe + 1
+	return snum
 
 
 
@@ -78,7 +82,7 @@ if __name__ == "__main__":
 	for i in seqs:
 		for j in i:
 			genJpg(j)
-		print countFile(i)
+	genMov(genJpg(i),countFile(i)[0],countFile(i)[-1])
 
 
 
