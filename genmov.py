@@ -57,19 +57,36 @@ def searchItem(root):
 	return seqs
 
 
+def searchExt(rootpath):
+	result = []
+	for root, dirs, files in os.walk(rootpath, topdown = True):
+		if root == rootpath:
+			continue
+		if dirs:
+			result.append("/".join([root] + dirs + [f]))
+		else:
+			results.append("/".join([root,f]))
+	return results
+	
+	
+
+
 def countFile(results):
-	p, fn = os.path.split(results)
-	filename, ext = os.path.splitext(fn)
-
-
-
+	snum = []
+	for  i in results:
+		flist = i.split(".")
+		snum.append(flist[1])
+		snum.sort()
+		howmany = int(snum[-1]) - int(snum[0]) + 1
+	return howmany
 
 
 
 
 if __name__ == "__main__":
 	root = "/project/circle/in/aces_exr"
-	searchItem(root)
-
+	seqs = searchItem(root)
+	for i in seqs:
+		print countFile(i)
 
 
